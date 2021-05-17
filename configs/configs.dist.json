@@ -1,0 +1,12 @@
+{
+    "mysql":{
+        "options": {
+            "host": "127.0.0.1",
+            "port": 3406,
+            "database": "skillupAfrica",
+            "dialect": "mysql",
+            "username": "your_username",
+            "password": "your_password"
+        }
+    }
+}
