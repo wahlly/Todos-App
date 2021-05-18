@@ -6,7 +6,6 @@ const url = 'https://coderbyte.com/api/challenges/json/age-counting';
 const crypto = require('crypto')
 
 //fetching api... 
-let result;
 (() => {
     https.get(`${url}`, (res) => {
         const data = [];
