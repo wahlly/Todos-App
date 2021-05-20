@@ -4,12 +4,12 @@ const path = require('path');
 
 module.exports = (app) => {
 
-    app.use(rateLimit({
-        windowMs: 1 * 60 * 1000,
-        max: 20,
-        message: 'oops!, kindly try again later'
+    // app.use(rateLimit({
+    //     windowMs: 1 * 60 * 1000,
+    //     max: 50,
+    //     message: 'oops!, kindly try again later'
         
-    }))
+    // }))
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
