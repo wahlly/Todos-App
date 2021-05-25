@@ -1,6 +1,5 @@
 const uuid = require('uuid');
-// const Todo = require('../models/mongoose/todosModel');
-const db = require('../models/sequelize/index')
+const Todo = require('../models/todosModel');
 const TodoValidator = require('../validators/todoValidators')
 
 
@@ -13,27 +12,19 @@ module.exports = class TodoService{
         if(!isValid) {
             return error
         }
-        // let newTodo = new Todo({
-        //     "uniqueId" : uuid.v4(),
-        //     "description": description,
-        //     "isCompleted": false
-        // })
 
-        //  return newTodo.save();
-
-        return db.create({
+        let newTodo = new Todo({
             "uniqueId" : uuid.v4(),
             "description": description,
             "isCompleted": false
         })
+
+         return newTodo.save();
     }
 
     static async gellAllTodos(){
 
-        // let result = Todo.find({}).sort({description: 1})
-        // return result
-
-        let result = db.findAll()
+        let result = Todo.find({}).sort({description: 1})
         return result
     }
     
@@ -45,10 +36,7 @@ module.exports = class TodoService{
         if(!isValid) {
             return error
         }
-        // return Todo.findById(paramsId)
-
-        return db.findOne({ where: {uniqueId: paramsId} })
-
+        return Todo.findById(paramsId)
     }
 
     static async removeTodo(paramsId) {
@@ -58,9 +46,7 @@ module.exports = class TodoService{
         if(!isValid) {
             return error
         }
-        // return Todo.findOneAndDelete({paramsId})
-
-        return db.destroy({ where: {uniqueId: paramsId} })
+        return Todo.findOneAndDelete({paramsId})
 
     }
 

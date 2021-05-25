@@ -4,17 +4,9 @@ const route = require('./routes/index')
 require('dotenv').config()
 const port = process.env.PORT || 8000;
 const bodyParser = require('./middlewares/middleware.js')
-const mongoose = require('mongoose');
-require('./models/sequelize/index');
+const connectDB = require('./models/configdb')
 
-// mongoose.connect(process.env.MONGO_URI, {
-//     useUnifiedTopology: true,
-//     useNewUrlParser: true,
-// }).then(() => {
-//     console.log(`mongodb is connected successfully`)
-// }).catch((err) => {
-//     console.error(err)
-// });
+connectDB();
 
 bodyParser(app);
 route(app);

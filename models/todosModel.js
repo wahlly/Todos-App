@@ -13,6 +13,9 @@ const todoSchema = new Mongoose.Schema({
         type: Boolean,
         default: false
     }
+},
+{
+    timestamps: true
 });
 
 module.exports = Mongoose.model('Todo', todoSchema);
