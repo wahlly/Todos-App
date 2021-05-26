@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt')
 
-export const usersSchema = new mongoose.Schema({
+exports.usersSchema = new mongoose.Schema({
     displayName: {
         type: String,
         required: true
@@ -19,6 +20,6 @@ export const usersSchema = new mongoose.Schema({
     timestamps: true
 })
 
-usersSchema.methods.comparePassword = (password, hashPassword) => {
+exports.usersSchema.methods.comparePassword = (password, hashPassword) => {
     return bcrypt.compareSync(password, hashPassword)
 }

@@ -4,8 +4,7 @@ module.exports = class TodoController{
     
     static async createTodo(req, res) {
         try{
-            let desc = req.body.description
-            let description = desc.toLowerCase()
+            let description = req.body.description
             let newTodo = await TodoService.createTodo(description);
 
             res.status(200).json({
@@ -14,6 +13,7 @@ module.exports = class TodoController{
             })
         }
         catch(err){
+            console.log(err)
             res.status(500).json({
                 status: 'failed',
                 data: 'err'

@@ -50,6 +50,7 @@ module.exports = class userController{
             })
         }
         catch(err) {
+            console.log(err)
             res.status(500).json({
                 status: 'failed',
                 err
