@@ -1,11 +1,12 @@
 const TodoService = require('../services/todoService');
+const mongoose = require('mongoose')
+const todoId = mongoose.Types.ObjectId
 
 module.exports = class TodoController{
     
     static async createTodo(req, res) {
         try{
-            let description = req.body.description
-            let newTodo = await TodoService.createTodo(description);
+            let newTodo = await TodoService.createTodo(req.body.description, req.params.id);
 
             res.status(200).json({
                 status: 'success',
@@ -24,7 +25,12 @@ module.exports = class TodoController{
 
     static async getTodos(req, res) {
         try{
-            let todos = await TodoService.gellAllTodos()
+            req.params.id = todoId(req.params.id)
+            let todos = await TodoService.gellAllTodos(req.params.id)
+
+            if(!todos){
+                return res.status(400).json({ err: 'bad request' })
+            }
             res.status(200).json({
                 status: 'success',
                 data: todos
@@ -70,7 +76,7 @@ module.exports = class TodoController{
         }
         catch(err) {
             res.status(500).json({
-                status: 'success',
+                status: 'failed',
                 msg: 'error occured while performing the specified operation',
                 data: err
             })

@@ -43,8 +43,11 @@ module.exports = class userController{
             return res.status(200).json({
                 status: 'success',
                 token: jwt.sign({
+                    firstName: user.firstName,
+                    lastName: user.lastName,
                     displayName: user.displayName,
                     email: user.email,
+                    role: user.role,
                     _id: user.id
                 }, 'RESTFULAPIs')
             })

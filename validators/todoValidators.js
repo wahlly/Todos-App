@@ -27,13 +27,13 @@ module.exports = class TodoValidator{
         let error = {}
 
         if(validator.isAlphanumeric(paramsId)) {
-            error.description = 'id should not only contain alphabets and numbers only!'
+            error.message = 'id should not only contain alphabets and numbers only!'
         }
         if(validator.isNumeric(paramsId)) {
-            error.description = 'id cannot be numbers only'
+            error.message = 'id cannot be numbers only'
         }
         if(validator.isAlpha(paramsId)) {
-            error.description = 'id cannot contain only alphabets'
+            error.message = 'id cannot contain only alphabets'
         }
 
         return {
