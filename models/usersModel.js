@@ -29,10 +29,7 @@ exports.usersSchema = new mongoose.Schema({
         enum: ['Admin', 'regular'],
         default: 'regular'
     },
-    todos: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: todoSchemaToUse
-    }]
+    todos: [todoSchemaToUse]
 },
 {
     timestamps: true

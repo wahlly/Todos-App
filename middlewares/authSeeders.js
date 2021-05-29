@@ -27,7 +27,7 @@ module.exports = class SeedAdmin{
            
             user.hashPassword = bcrypt.hash(password, 10)
 
-            return user.save()
+            return await user.save()
 
         }
         catch(err) {

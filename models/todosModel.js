@@ -6,8 +6,7 @@ const todoSchema = new Mongoose.Schema({
         require: true
     },
     userId: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Users'
+        type: String,
     },
     description: {
         type: String,

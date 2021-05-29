@@ -13,7 +13,7 @@ module.exports = class TodoController{
                 data: newTodo
             })
         }
-        catch(err){
+        catch(err) {
             console.log(err)
             res.status(500).json({
                 status: 'failed',
@@ -36,7 +36,7 @@ module.exports = class TodoController{
                 data: todos
             })
         }
-        catch(err){
+        catch(err) {
             console.error(err)
             res.status(500).json({
                 status: 'failed',
@@ -64,14 +64,32 @@ module.exports = class TodoController{
 
     }
 
-    static async deleteTodo(req, res){
+    /**return a single user profile */
+    static async getUser(req, res) {
         try{
-            let todo = await TodoService.removeTodo(req.params.uniqueId)
+            let user = await TodoService.getUserProfile(req.params.id)
 
             res.status(200).json({
                 status: 'success',
-                msg: `task with id:${req.params.uniqueId} has been deleted successfully`,
-                data: todo
+                data: user
+            })
+        }
+        catch(err) {
+            res.status(500).json({
+                status: 'user not found',
+                data: err
+            })
+        }
+    }
+
+    /**delete a todo */
+    static async deleteTodo(req, res){
+        try{
+             await TodoService.removeTodo(req.params.uniqueId)
+
+            res.status(200).json({
+                status: 'success',
+                msg: `task with id:${req.params.uniqueId} has been deleted successfully`
             })
         }
         catch(err) {
