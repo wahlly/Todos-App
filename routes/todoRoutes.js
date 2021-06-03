@@ -1,20 +1,23 @@
 const router = require('express').Router();
-const { getTodos, createTodo, specifyTodo, deleteTodo, getUser } = require('../controllers/todoController');
+const { getTodos, createTodo, specifyTodo, deleteTodo, getUser, updateTodo } = require('../controllers/todoController');
 const { checkIfAdmin } = require('../middlewares/authSeeders');
 
-//to list all todos that belongs to a user
-router.get('/user/todos/:id', (req, res) => getTodos(req, res));
+//get all todos
+router.get('/user/todos/', (req, res) => getTodos(req, res));
 
 //create a todo
-router.post('/user/todos/create/:id', (req, res) => createTodo(req, res));
+router.post('/user/create/todos/:id', (req, res) => createTodo(req, res));
 
-//get a todo by a unique id
+//get a todo by its uniqueId
 router.get('/todos/:uniqueId', (req, res) => specifyTodo(req, res));
 
 //get a user's profile
 router.get('/user/profile/:id', (req, res) => getUser(req, res))
 
 //delete a todo
-router.delete('/user/todos/:uniqueId', (req, res) => deleteTodo(req, res));
+router.delete('/user/todos/:id', (req, res) => deleteTodo(req, res));
+
+//update a todo
+router.put('/todos/update/:uniqueId', (req, res) => updateTodo(req, res))
 
 module.exports = router

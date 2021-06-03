@@ -1,14 +1,19 @@
 const TodoService = require('../services/todoService');
 const mongoose = require('mongoose')
-const todoId = mongoose.Types.ObjectId
 
 module.exports = class TodoController{
     
+    /**
+     * 
+     * @param { userId} req 
+     * @route PoST /user/create/todos/:userId
+     * @returns the newly created todo
+     */
     static async createTodo(req, res) {
         try{
             let newTodo = await TodoService.createTodo(req.body.description, req.params.id);
 
-            res.status(200).json({
+            return res.status(200).json({
                 status: 'success',
                 data: newTodo
             })
@@ -23,15 +28,20 @@ module.exports = class TodoController{
 
     }
 
+    /**
+     * 
+     * @route GET /user/todos
+     * @param {todos} res 
+     * @returns all todos
+     */
     static async getTodos(req, res) {
         try{
-            req.params.id = todoId(req.params.id)
-            let todos = await TodoService.gellAllTodos(req.params.id)
+            let todos = await TodoService.getAllTodos()
 
             if(!todos){
                 return res.status(400).json({ err: 'bad request' })
             }
-            res.status(200).json({
+            return res.status(200).json({
                 status: 'success',
                 data: todos
             })
@@ -46,17 +56,27 @@ module.exports = class TodoController{
 
     }
 
+    /**
+     * 
+     * @param {uniqueId} req 
+     * @route GET /todos/:uniqueId
+     * @returns the todo that has the given uniqueId passed as a params
+     */
     static async specifyTodo(req, res) {
         try{
             let todo = await TodoService.getTodoById(req.params.uniqueId);
 
-            res.status(200).json({
+            if(!todo) {
+                return res.status(404).json({ msg: 'request not found!' })
+            }
+
+            return res.status(200).json({
                 status: 'success',
                 data: todo
             });
         }
         catch(err) {
-            res.status(404).json({
+            res.status(500).json({
                 status: 'Not Found',
                 data: err
             });
@@ -64,32 +84,49 @@ module.exports = class TodoController{
 
     }
 
-    /**return a single user profile */
+    /**
+     * 
+     * @param {userId} req 
+     * @route GET /user/profile/:id
+     * @returns user's profile
+     */
     static async getUser(req, res) {
         try{
             let user = await TodoService.getUserProfile(req.params.id)
 
-            res.status(200).json({
+            if(!user) {
+                return res.status(404).json({ msg: 'user not found' })
+            }
+
+            return res.status(200).json({
                 status: 'success',
                 data: user
             })
         }
         catch(err) {
             res.status(500).json({
-                status: 'user not found',
+                status: 'server error',
                 data: err
             })
         }
     }
 
-    /**delete a todo */
+    /**
+     * 
+     * @param {todo's id} req 
+     * @route DELETE /user/todos/:id
+     * @returns success message if completed || error message if not completed
+     */
     static async deleteTodo(req, res){
         try{
-             await TodoService.removeTodo(req.params.uniqueId)
+            let todo = await TodoService.removeTodo(req.params.id)
+            if(!todo) {
+                return res.status(404).json({ msg: 'not found'})
+            }
 
-            res.status(200).json({
+            return res.status(200).json({
                 status: 'success',
-                msg: `task with id:${req.params.uniqueId} has been deleted successfully`
+                msg: `task with id:${req.params.id} has been deleted successfully`
             })
         }
         catch(err) {
@@ -100,6 +137,24 @@ module.exports = class TodoController{
             })
         }
 
+    }
+
+    static async updateTodo(req, res) {
+        try{
+            const updatedTodo = await TodoService.editTodo(req.params.uniqueId, req.body.description)
+            return res.status(200).json({
+                status: 'success',
+                msg: 'updated successfully',
+                updatedTodo
+            })
+        }
+        catch(err) {
+            console.error(err)
+            res.status(500).json({
+                status: 'failed',
+                msg: 'server error'
+            })
+        }
     }
 
 }

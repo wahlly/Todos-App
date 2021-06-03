@@ -32,13 +32,27 @@ module.exports = class TodoService{
 
     }
 
-    /**gets all todos created by a specific user using its id */
-    static async gellAllTodos(paramsId){
+    /** 
+     * @desc gets all todos
+     * */
+    static async getAllTodos(){
 
-        return await Users.findById(paramsId, {'todos': 1})
+        // return await Users.findById(paramsId, {'todos': 1})
+        try{
+            return await todosModel.find({})
+            .populate('user')
+            .lean()
+        }
+        catch(err) {
+            console.error(err)
+        }
     }
-    
 
+    /**
+     * 
+     * @param {todos uniqueId} paramsId 
+     * @returns todo that has the given uniqueId
+     */
     static async getTodoById(paramsId){
 
         const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
@@ -46,36 +60,41 @@ module.exports = class TodoService{
         if(!isValid) {
             return error
         }
-        return Todo.findOne({uniqueId: paramsId})
+        try{
+            return todosModel.findOne({uniqueId: paramsId})
+        }
+        catch(err) {
+            console.error(err)
+        }
     }
 
-    /**get a user's profile by its Id */
+    /**
+     * 
+     * @desc return's a user profile using the user's userId
+     * 
+     */
     static async getUserProfile(paramsId){
-        // const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
+        const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
 
-        // if(!isValid) return error
+        if(!isValid) return error
 
         return await Users.findById(paramsId, {uniqueId: true, displayName: true, email: true, firstName: true, lastName: true, createdAt: true})
     }
 
-    /**delete a todo 
-     * @params paramsId - todo's unique
+    /**
+     * @desc deletes a todo
     */
     static async removeTodo(paramsId) {
-        try{
-                const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
 
-            if(!isValid) {
-                    return error
-            }
-                return await todoSchemaToUse.findOneAndDelete({ where: {uniqueId: paramsId}})
+        try{     
+            return await todosModel.findByIdAndDelete(paramsId)
         }
         catch(error) {
             return error
         }
     }
 
-    static async updateTodo(description, paramsId) {
+    static async editTodo(paramsId, description) {
 
             const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
 
@@ -83,7 +102,10 @@ module.exports = class TodoService{
                 return error
             }
 
-            return db.update({ description: description}, {where: {uniqueId: paramsId}})
+            return await todosModel.findOneAndUpdate({ uniqueId: paramsId }, { description: description}, {
+                new: true,
+                runValidators: true
+             })
 
 
     }
