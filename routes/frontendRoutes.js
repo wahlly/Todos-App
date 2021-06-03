@@ -1,6 +1,14 @@
 const router = require('express').Router();
 const { getTodos, createTodo, deleteTodo, editTodo, specifyTodo } = require('../controllers/frontendController');
-const { newTodo } = require('../controllers/formController');
+const { newTodo, userLogin, registerUser } = require('../controllers/formController');
+const { requireLogin } = require('../middlewares/auth');
+
+
+//get the User lgin page
+router.get('/login', (req, res) => userLogin(req, res))
+
+//get the User registration page
+router.get('/register', (req, res) => registerUser(req, res))
 
 //get the dashboard which shows a list of all the available todos
 router.get('/', (req, res) => getTodos(req, res));
