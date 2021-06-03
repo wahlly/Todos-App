@@ -19,7 +19,7 @@ module.exports = class FrontendTodoController{
 
     static async getTodos(req, res) {
         try{
-            let todos = await TodoService.gellAllTodos()
+            let todos = await TodoService.getAllTodos()
            res.render('dashBoard', {todos})
         }
         catch(err){
