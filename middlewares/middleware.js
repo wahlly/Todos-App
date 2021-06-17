@@ -13,18 +13,18 @@ module.exports = (app) => {
     // }))
 
     //JWT setup
-    app.use((req, res, next) => {
-        if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] == 'JWT') {
-            jwt.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', (err, decodedToken) => {
-                if(err) req.user = undefined
-                req.user = decodedToken
-                next()
-            })
-        } else{
-            req.user = undefined
-            next()
-        }
-    })
+    // app.use((req, res, next) => {
+    //     if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] == 'JWT') {
+    //         jwt.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', (err, decodedToken) => {
+    //             if(err) req.user = undefined
+    //             req.user = decodedToken
+    //             next()
+    //         })
+    //     } else{
+    //         req.user = undefined
+    //         next()
+    //     }
+    // })
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));

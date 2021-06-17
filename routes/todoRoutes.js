@@ -3,7 +3,7 @@ const { getTodos, createTodo, specifyTodo, deleteTodo, getUser, updateTodo } = r
 const { checkIfAdmin } = require('../middlewares/authSeeders');
 
 //get all todos
-router.get('/user/todos/', (req, res) => getTodos(req, res));
+router.get('/user/todos/:userId', (req, res) => getTodos(req, res));
 
 //create a todo
 router.post('/user/create/todos/:id', (req, res) => createTodo(req, res));

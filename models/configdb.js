@@ -3,18 +3,17 @@ const mongoose = require('mongoose')
 
 
 module.exports = async() => {
-   
-    await mongoose.connect(process.env.MONGO_URI, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false
-    })
-    .then(() => {
+   try{
+        await mongoose.connect(process.env.MONGO_URI, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useFindAndModify: false
+        })
         console.log(`mongodb is connected successfully`)
-    })
-    .catch((err) => {
+    }
+    catch(err) {
         console.error(err)
-    });
+    }
 
 }

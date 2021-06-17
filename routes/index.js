@@ -7,7 +7,7 @@ module.exports = (app) => {
 
     app.use('/auth', authRoutes)
 
-    app.use('/api/v1/', requireLogin, todoRoutes);
+    app.use('/api/v1/', todoRoutes);
 
     app.use('/todos', frontendTodoRoutes);
 };

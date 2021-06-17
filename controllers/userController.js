@@ -8,17 +8,21 @@ module.exports = class userController{
             let userProfile = req.body
             let newUser = await userRegistration(userProfile)
             newUser.hashPassword = undefined
-
-            res.status(200).json({
-                status: 'success',
-                data: newUser
-            })
+            return res.redirect('/todos/login')
+            // res.status(200).json({
+            //     status: 'success',
+            //     data: newUser
+            // })
         }
         catch (error) {
-           res.status(500).json({
-               status: 'failed',
-               data: error
-           })
+            // console.log(error)
+            if(error) {
+                res.render('error')
+            }
+        //    res.status(500).json({
+        //        status: 'failed',
+        //        data: error
+        //    })
         }
     }
 
@@ -39,26 +43,28 @@ module.exports = class userController{
                     msg: 'oops! Wrong password. try again'
                 })
             }
-
-            return res.status(200).json({
-                status: 'success',
-                token: jwt.sign({
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    displayName: user.displayName,
-                    email: user.email,
-                    role: user.role,
-                    _id: user.id
-                }, 'RESTFULAPIs')
-            })
+            req.session.isLoggedIn = true
+            req.session.displayName = user.displayName
+            req.session.userId = user._id
+            return res.redirect('/todos')
         }
         catch(err) {
+            res.render('error')
             console.log(err)
-            res.status(500).json({
-                status: 'failed',
-                err
-            })
+            // res.status(500).json({
+            //     status: 'failed',
+            //     err
+            // })
         }
+    }
+
+    static async logout(req, res) {
+        req.session.isLoggedIn = false
+        req.session = null
+        req.session.cookie.maxAge = new Date().getTime();
+        // req.session.destroy()
+        console.log(req.session)
+        res.redirect('/todos/login')
     }
 
 }

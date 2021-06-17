@@ -8,12 +8,9 @@ const TodoValidator = require('../validators/todoValidators')
 
 
 module.exports = class TodoService{
-
     /**create a Todo */
     static async createTodo(description, paramsId) {
-
         const { error, isValid } = await TodoValidator.todoCreation(description)
-
         if(!isValid) {
             return error
         }
@@ -25,23 +22,20 @@ module.exports = class TodoService{
             "isCompleted": false
         })
         await newTodo.save()
-
         await Users.findByIdAndUpdate(paramsId, { $push: {todos: newTodo, new: true}})
-
         return newTodo
-
     }
 
     /** 
      * @desc gets all todos
      * */
-    static async getAllTodos(){
-
-        // return await Users.findById(paramsId, {'todos': 1})
+    static async getAllTodos(userId){
         try{
-            return await todosModel.find({})
-            .populate('user')
-            .lean()
+            // return await Users.findById(paramsId, {'todos': 1})
+        
+            return await todosModel.find({ userId: userId })
+            // .populate('user')
+            // .lean()
         }
         catch(err) {
             console.error(err)
@@ -54,9 +48,7 @@ module.exports = class TodoService{
      * @returns todo that has the given uniqueId
      */
     static async getTodoById(paramsId){
-
         const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
-
         if(!isValid) {
             return error
         }
@@ -75,7 +67,6 @@ module.exports = class TodoService{
      */
     static async getUserProfile(paramsId){
         const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
-
         if(!isValid) return error
 
         return await Users.findById(paramsId, {uniqueId: true, displayName: true, email: true, firstName: true, lastName: true, createdAt: true})
@@ -85,7 +76,6 @@ module.exports = class TodoService{
      * @desc deletes a todo
     */
     static async removeTodo(paramsId) {
-
         try{     
             return await todosModel.findByIdAndDelete(paramsId)
         }
@@ -94,20 +84,20 @@ module.exports = class TodoService{
         }
     }
 
+    /**
+     * 
+     * @param {uniqueId} paramsId 
+     * @param {todo's description} description 
+     * @desc updates a todo
+     */
     static async editTodo(paramsId, description) {
-
             const { error, isValid } = await TodoValidator.retrieveTodoById(paramsId)
-
             if(!isValid) {
                 return error
             }
-
             return await todosModel.findOneAndUpdate({ uniqueId: paramsId }, { description: description}, {
                 new: true,
                 runValidators: true
              })
-
-
     }
-
 }

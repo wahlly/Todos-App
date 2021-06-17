@@ -1,10 +1,6 @@
 const TodoService = require('../services/todoService');
-const mongoose = require('mongoose')
-
 module.exports = class TodoController{
-    
     /**
-     * 
      * @param { userId} req 
      * @route PoST /user/create/todos/:userId
      * @returns the newly created todo
@@ -36,7 +32,7 @@ module.exports = class TodoController{
      */
     static async getTodos(req, res) {
         try{
-            let todos = await TodoService.getAllTodos()
+            let todos = await TodoService.getAllTodos(req.params.userId)
 
             if(!todos){
                 return res.status(400).json({ err: 'bad request' })
@@ -93,7 +89,6 @@ module.exports = class TodoController{
     static async getUser(req, res) {
         try{
             let user = await TodoService.getUserProfile(req.params.id)
-
             if(!user) {
                 return res.status(404).json({ msg: 'user not found' })
             }
@@ -136,7 +131,6 @@ module.exports = class TodoController{
                 data: err
             })
         }
-
     }
 
     static async updateTodo(req, res) {
@@ -156,5 +150,4 @@ module.exports = class TodoController{
             })
         }
     }
-
 }
